@@ -1,0 +1,3 @@
+﻿namespace PricingPlans.API.statics
+{
+}
