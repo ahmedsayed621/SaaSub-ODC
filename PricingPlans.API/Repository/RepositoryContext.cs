@@ -1,6 +1,12 @@
-﻿namespace PricingPlans.API.Repository
+﻿
+namespace PricingPlans.API.Repository;
+
+public class RepositoryContext 
 {
-    public class RepositoryContext
-    {
-    }
+    //public RepositoryContext(DbContextOptions<RepositoryContext> options)
+    //    :base(options)
+    //{
+
+    //}
+
 }
