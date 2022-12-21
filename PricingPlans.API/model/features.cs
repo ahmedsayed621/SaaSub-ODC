@@ -1,6 +1,8 @@
-﻿namespace PricingPlans.API.model
+﻿using PricingPlans.API.Data.Base;
+
+namespace PricingPlans.API.model
 {
-    public class feature
+    public class feature:IEntityBase
     {
         public int Id { get; set; }
         public string featuresName { get; set; }
