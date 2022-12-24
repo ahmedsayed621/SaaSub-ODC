@@ -9,6 +9,7 @@ namespace PricingPlans.API.DTOs
         public string Descraption { get; set; }
         public decimal PriceMonth { get; set; }
         public decimal PriceYear { get; set; }
-        
+        public List<PlanFeaturesDto> PlanFeaturesDtos { get; set; }
+
     }
 }
