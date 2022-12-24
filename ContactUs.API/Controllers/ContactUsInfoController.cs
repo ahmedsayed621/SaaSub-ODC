@@ -6,6 +6,8 @@ using ContactUs.API.Errors;
 using ContactUs.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ContactUs.API.data;
+using Talabat.API.Errors;
 
 namespace ContactUs.API.Controllers
 {
@@ -13,11 +15,13 @@ namespace ContactUs.API.Controllers
     [ApiController]
     public class ContactUsInfoController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IGenercRepositry<ContactInfo> repositry;
+        private readonly ApplicationDbContext context;
 
-        public ContactUsInfoController(IUnitOfWork unitOfWork)
+        public ContactUsInfoController( ApplicationDbContext _context  ,IGenercRepositry<ContactInfo> _repositry)
         {
-            _unitOfWork=unitOfWork;
+            _repositry = repositry;
+            _context=context;
         }
 
         [HttpGet("allData")]
@@ -25,12 +29,24 @@ namespace ContactUs.API.Controllers
         public async Task<ActionResult<Pagintation<IReadOnlyList<ContactInfo>>>> GetContactUs([FromQuery] ContactUsSpecParams specParams)
         {
 
-            var specCount = new ContactUsWithFilterForCountSpecification(specParams);
-            var itemCount = await _unitOfWork.Repositry<ContactInfo>().Count(specCount);
-            var data = await _unitOfWork.Repositry<ContactInfo>().GetAllDataWithSpecificatonAsync(specCount);
-            return Ok(new Pagintation<ContactInfo>(specParams.PageIndex, specParams.PageSize, itemCount, data));
 
+
+
+
+            var specCount = new ContactUsWithFilterForCountSpecification(specParams);
+            var itemCount = await repositry.Count(specCount);
+            var data = await repositry.GetAllDataWithSpecificatonAsync(specCount);
+            //var Data = await repositry.GetAllAsync();
+
+
+            if (data == null) return NotFound(new ApiResponse(404));
+
+            return Ok(new Pagintation<ContactInfo>(specParams.PageIndex, specParams.PageSize, itemCount, data));
+           
         }
+
+
+    
 
 
 
@@ -40,7 +56,7 @@ namespace ContactUs.API.Controllers
 
         {
 
-            var data = await _unitOfWork.Repositry<ContactInfo>().GetDataByIdAsync(id);
+            var data = await repositry.GetDataByIdAsync(id);
 
             if (data == null)
 
@@ -68,8 +84,10 @@ namespace ContactUs.API.Controllers
                      Message = contactUsInfo?.Message,
                 };
 
-                await _unitOfWork.Repositry<ContactInfo>().Add(ContactUsInfo);
-                var result = await _unitOfWork.Complet();
+                await repositry.Add(ContactUsInfo);
+              //  var result = await _unitOfWork.Complet();
+              context.SaveChanges();    
+              
 
                 return Ok(ContactUsInfo);
             }
@@ -84,14 +102,15 @@ namespace ContactUs.API.Controllers
         [ProducesResponseType(typeof(ApiErroeResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ContactInfo>> DeleteContact(string Name)
         {
-            var User = await _unitOfWork.Repositry<ContactInfo>().GetDataByNameAsync(Name);
+            var User = await repositry.GetDataByNameAsync(Name);
 
             if (User == null)
 
                 return BadRequest("Cant Find This User");
 
-            _unitOfWork.Repositry<ContactInfo>().Delete(User);
-            await _unitOfWork.Complet();
+            repositry.Delete(User);
+            //await _unitOfWork.Complet();
+            context.SaveChanges();
 
             return Ok(true);
 

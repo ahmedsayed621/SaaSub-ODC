@@ -1,11 +1,14 @@
 using ContactUs.API.data;
 using Microsoft.EntityFrameworkCore;
+using ContactUs.API.BLL.InterFaces;
+using ContactUs.API.BLL.Repositries;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddScoped(typeof(IGenercRepositry<>), typeof(GenericRepositry<>));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
