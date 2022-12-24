@@ -20,10 +20,29 @@ namespace PricingPlans.API.Data.Services
             plan pln = _mapper.Map<plan>(planDto);
             if (pln.Id > 0)
             {
+                var plansFeatures = _context.plansFeatures.Where(p=>p.PlanId==planDto.Id).ToList();
+                _context.plansFeatures.RemoveRange(plansFeatures);
+                pln.plansFeatures = new List<plansFeatures>();
+                foreach (var item in planDto.PlanFeaturesDtos)
+                {
+                    pln.plansFeatures.Add(new plansFeatures
+                    {
+                        featureId = item.featureId,
+                    });
+                }
                 _context.Update(pln);
             }
             else
             {
+                pln.plansFeatures = new List<plansFeatures>();
+                foreach (var item in planDto.PlanFeaturesDtos)
+                {
+                    pln.plansFeatures.Add(new plansFeatures
+                    {
+                         featureId = item.featureId,
+                    });
+                }
+
                 _context.Add(pln);
             }
             await _context.SaveChangesAsync();
@@ -60,7 +79,8 @@ namespace PricingPlans.API.Data.Services
 
         public async Task<IEnumerable<PlanDto>> GetPlans()
         {
-            List<plan> planList = await _context.plans.ToListAsync();
+            List<plan> planList = await _context.plans
+                 .ToListAsync();
             return _mapper.Map<List<PlanDto>>(planList);
         }
     }
