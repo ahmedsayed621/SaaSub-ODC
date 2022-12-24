@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PricingPlans.API.Data;
 
@@ -10,9 +11,10 @@ using PricingPlans.API.Data;
 namespace PricingPlans.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221224130040_seeding feature")]
+    partial class seedingfeature
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -82,84 +84,29 @@ namespace PricingPlans.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("plans");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Descraption = "Lorem ipsum dolor sit amet consectetur adipiscing elit \r\ninterdum ullamcorper sed pharetra sene.",
-                            Name = "Basic",
-                            PriceMonth = 7m,
-                            PriceYear = 96m
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Descraption = "Lorem ipsum dolor sit amet consectetur adipiscing elit \r\ninterdum ullamcorper sed pharetra sene.",
-                            Name = "Advanced",
-                            PriceMonth = 7m,
-                            PriceYear = 96m
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Descraption = "Lorem ipsum dolor sit amet consectetur adipiscing elit \r\ninterdum ullamcorper sed pharetra sene.",
-                            Name = "Pro",
-                            PriceMonth = 7m,
-                            PriceYear = 96m
-                        });
                 });
 
             modelBuilder.Entity("PricingPlans.API.model.plansFeatures", b =>
                 {
-                    b.Property<int>("featureId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("PlanId")
                         .HasColumnType("int");
 
-                    b.HasKey("featureId", "PlanId");
+                    b.Property<int>("featureId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("PlanId");
 
-                    b.ToTable("plansFeatures");
+                    b.HasIndex("featureId");
 
-                    b.HasData(
-                        new
-                        {
-                            featureId = 1,
-                            PlanId = 1
-                        },
-                        new
-                        {
-                            featureId = 2,
-                            PlanId = 1
-                        },
-                        new
-                        {
-                            featureId = 3,
-                            PlanId = 1
-                        },
-                        new
-                        {
-                            featureId = 4,
-                            PlanId = 1
-                        },
-                        new
-                        {
-                            featureId = 1,
-                            PlanId = 2
-                        },
-                        new
-                        {
-                            featureId = 2,
-                            PlanId = 2
-                        },
-                        new
-                        {
-                            featureId = 3,
-                            PlanId = 2
-                        });
+                    b.ToTable("plansFeatures");
                 });
 
             modelBuilder.Entity("PricingPlans.API.model.plansFeatures", b =>

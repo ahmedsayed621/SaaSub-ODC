@@ -1,8 +1,7 @@
-﻿using PricingPlans.API.Data.Base;
-
+﻿
 namespace PricingPlans.API.model
 {
-    public class plan:IEntityBase
+    public class plan
     {
         public int Id { get; set; }
         public string Name { get; set; }

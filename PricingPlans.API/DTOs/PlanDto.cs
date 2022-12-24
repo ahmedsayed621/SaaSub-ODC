@@ -1,11 +1,14 @@
-﻿namespace PricingPlans.API.DTOs
+﻿using PricingPlans.API.model;
+
+namespace PricingPlans.API.DTOs
 {
-    public class NewPlanVM
+    public class PlanDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
+        public string Descraption { get; set; }
         public decimal PriceMonth { get; set; }
         public decimal PriceYear { get; set; }
+        
     }
 }
