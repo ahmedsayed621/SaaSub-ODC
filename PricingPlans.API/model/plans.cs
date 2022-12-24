@@ -8,7 +8,7 @@ namespace PricingPlans.API.model
         public decimal PriceMonth { get; set; }
         public decimal PriceYear { get; set; }
         public string Descraption { get; set; }
-        public List<plansFeatures> plansFeatures { get; set; }
+        public virtual ICollection<plansFeatures> plansFeatures { get; set; }
 
     }
 }
