@@ -4,9 +4,9 @@
     {
         
         public int PlanId { get; set; }
-        public plan Plan { get; set; }
+        public virtual plan Plan { get; set; }
         public int featureId { get; set; }
-        public feature feature { get; set; }
+        public virtual feature feature { get; set; }
 
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PricingPlans.API.DTOs;
 using PricingPlans.API.model;
 using System;
+using System.Runtime.CompilerServices;
 
 namespace PricingPlans.API.Data.Services
 {
@@ -23,11 +24,11 @@ namespace PricingPlans.API.Data.Services
                 var plansFeatures = _context.plansFeatures.Where(p=>p.PlanId==planDto.Id).ToList();
                 _context.plansFeatures.RemoveRange(plansFeatures);
                 pln.plansFeatures = new List<plansFeatures>();
-                foreach (var item in planDto.PlanFeaturesDtos)
+                foreach (var item in planDto.featureDtos)
                 {
                     pln.plansFeatures.Add(new plansFeatures
                     {
-                        featureId = item.featureId,
+                        featureId = item.Id,
                     });
                 }
                 _context.Update(pln);
@@ -35,11 +36,11 @@ namespace PricingPlans.API.Data.Services
             else
             {
                 pln.plansFeatures = new List<plansFeatures>();
-                foreach (var item in planDto.PlanFeaturesDtos)
+                foreach (var item in planDto.featureDtos)
                 {
                     pln.plansFeatures.Add(new plansFeatures
                     {
-                         featureId = item.featureId,
+                         featureId = item.Id,
                     });
                 }
 
@@ -73,13 +74,13 @@ namespace PricingPlans.API.Data.Services
 
         public async Task<PlanDto> GetPlanById(int id)
         {
-            plan pln = await _context.plans.Include(x=>x.plansFeatures).ThenInclude(x=>x.feature).Where(x => x.Id == id).FirstOrDefaultAsync();
+            plan pln = await _context.plans.Include(x=>x.plansFeatures).ThenInclude(x=>x.feature).FirstOrDefaultAsync(x=>x.Id==id);
             return _mapper.Map<PlanDto>(pln);
         }
 
         public async Task<IEnumerable<PlanDto>> GetPlans()
         {
-            List<plan> planList = await _context.plans
+            List<plan> planList = await _context.plans.Include(x=>x.plansFeatures).ThenInclude(y=>y.feature)
                  .ToListAsync();
             return _mapper.Map<List<PlanDto>>(planList);
         }
