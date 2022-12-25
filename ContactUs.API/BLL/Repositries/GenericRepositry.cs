@@ -2,7 +2,7 @@
 using ContactUs.API.BLL.InterFaces;
 using ContactUs.API.BLL.Spcefication;
 using ContactUs.API.data;
-
+using ContactUs.API.Data;
 using ContactUs.API.Model;
 
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace ContactUs.API.BLL.Repositries
 {
-    public class GenericRepositry<TEntity> : IGenercRepositry<TEntity> where TEntity : class
+    public class GenericRepositry<TEntity> : IGenercRepositry<TEntity> where TEntity : BaseEntity
     {
         private readonly ApplicationDbContext _context;
 

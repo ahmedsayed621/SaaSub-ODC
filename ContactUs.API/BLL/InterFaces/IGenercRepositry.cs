@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ContactUs.API.BLL.Spcefication;
+using ContactUs.API.Data;
 using ContactUs.API.Model;
 
 namespace ContactUs.API.BLL.InterFaces
 {
-    public interface IGenercRepositry<T>  where T : class
+    public interface IGenercRepositry<T>  where T : BaseEntity
     {
         Task Add(T entity);
         T Delete(T entity);

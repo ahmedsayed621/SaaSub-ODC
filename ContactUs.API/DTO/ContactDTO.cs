@@ -8,8 +8,6 @@
         public string Company { get; set; }
         public string Subject { get; set; }
         public string Message { get; set; }
-        public List<string> ErrorMessages { get; set; }
-        public object Result { get; set; }
-        public bool IsSuccess { get; set; } = true;
+     
     }
 }

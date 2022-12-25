@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ContactUs.API.BLL.InterFaces;
 using ContactUs.API.BLL.Repositries;
 using AutoMapper;
+using ContactUs.API.Model;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped(typeof(IGenercRepositry<>), typeof(GenericRepositry<>));
+builder.Services.AddScoped(typeof(IGenercRepositry<>),typeof(GenericRepositry<>));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

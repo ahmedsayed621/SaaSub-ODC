@@ -22,8 +22,8 @@ namespace ContactUs.API.Controllers
 
         public ContactUsInfoController( ApplicationDbContext _context  ,IGenercRepositry<ContactInfo> _repositry)
         {
-            _repositry = repositry;
-            _context=context;
+       repositry = _repositry;
+            context = _context;
             this._response = new ContactDTO();
         }
 
@@ -37,17 +37,17 @@ namespace ContactUs.API.Controllers
             try
             {
               var ContactUs = await repositry.GetAllAsync();
-                _response.Result = ContactUs;
+             //  _response.Result = ContactUs;
+                return Ok(ContactUs);
             }
             catch (Exception ex)
             {
 
-                _response.IsSuccess = false;
-                _response.ErrorMessages
-                    = new List<string>() { ex.ToString() };
+
+                return BadRequest(ex.Message);
 
             }
-            return Ok(_response);
+           
 
 
 
@@ -65,17 +65,16 @@ namespace ContactUs.API.Controllers
             try
             {
                 var Contact = await repositry.GetDataByIdAsync(id);
-                _response.Result = Contact;
+              return Ok(Contact);
             }
             catch (Exception ex)
             {
 
-                _response.IsSuccess = false;
-                _response.ErrorMessages
-                    = new List<string>() { ex.ToString() };
+                return BadRequest(ex.Message);
+
 
             }
-            return Ok(_response);
+           
         }
 
         [HttpPost]
@@ -110,12 +109,12 @@ namespace ContactUs.API.Controllers
             }
         }
 
-        [HttpDelete("{Name}")]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiErroeResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ContactInfo>> DeleteContact(string Name)
+        public async Task<ActionResult<ContactInfo>> DeleteContact(int id)
         {
-            var User = await repositry.GetDataByNameAsync(Name);
+            var User = await repositry.GetDataByIdAsync(id);
 
             if (User == null)
 

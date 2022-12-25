@@ -1,8 +1,10 @@
-﻿namespace ContactUs.API.Model
+﻿using ContactUs.API.Data;
+
+namespace ContactUs.API.Model
 {
-    public class ContactInfo
+    public class ContactInfo :BaseEntity
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }
         public string Company { get; set; }
