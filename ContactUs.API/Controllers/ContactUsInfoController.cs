@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ContactUs.API.data;
 using Talabat.API.Errors;
+using ContactUs.API.DTO;
 
 namespace ContactUs.API.Controllers
 {
@@ -15,6 +16,7 @@ namespace ContactUs.API.Controllers
     [ApiController]
     public class ContactUsInfoController : ControllerBase
     {
+        protected ContactDTO _response;
         private readonly IGenercRepositry<ContactInfo> repositry;
         private readonly ApplicationDbContext context;
 
@@ -22,47 +24,58 @@ namespace ContactUs.API.Controllers
         {
             _repositry = repositry;
             _context=context;
+            this._response = new ContactDTO();
         }
 
         [HttpGet("allData")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<Pagintation<IReadOnlyList<ContactInfo>>>> GetContactUs([FromQuery] ContactUsSpecParams specParams)
+        public async Task<ActionResult<IReadOnlyList<ContactInfo>>> GetContactUs()
         {
 
 
 
+            try
+            {
+              var ContactUs = await repositry.GetAllAsync();
+                _response.Result = ContactUs;
+            }
+            catch (Exception ex)
+            {
+
+                _response.IsSuccess = false;
+                _response.ErrorMessages
+                    = new List<string>() { ex.ToString() };
+
+            }
+            return Ok(_response);
 
 
-            var specCount = new ContactUsWithFilterForCountSpecification(specParams);
-            var itemCount = await repositry.Count(specCount);
-            var data = await repositry.GetAllDataWithSpecificatonAsync(specCount);
-            //var Data = await repositry.GetAllAsync();
 
 
-            if (data == null) return NotFound(new ApiResponse(404));
-
-            return Ok(new Pagintation<ContactInfo>(specParams.PageIndex, specParams.PageSize, itemCount, data));
-           
         }
 
 
-    
 
-
-
-        [HttpGet("{Name}")]
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<ContactInfo>> GetContactById(int  id)
 
         {
 
-            var data = await repositry.GetDataByIdAsync(id);
+            try
+            {
+                var Contact = await repositry.GetDataByIdAsync(id);
+                _response.Result = Contact;
+            }
+            catch (Exception ex)
+            {
 
-            if (data == null)
+                _response.IsSuccess = false;
+                _response.ErrorMessages
+                    = new List<string>() { ex.ToString() };
 
-                return NotFound();
-
-            return Ok(data);
+            }
+            return Ok(_response);
         }
 
         [HttpPost]
